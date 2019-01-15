@@ -1,2 +1,1 @@
-# priceComp
-# priceComp
+# Welcome to Mike's Price Comparison Space!
