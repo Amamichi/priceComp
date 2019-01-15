@@ -1,6 +1,46 @@
-<% layout('layout') %>
-<h1>歡迎來到比價網</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ <% include partials/head %> 
+</head>
+<body>
+<% include partials/menu %>
 
-<ul>
+<div class="container-fluid bg-3 text-center">    
+  <h3>Welcome to Mike's Price Comparison Space!</h3><br>
+  <!-- <%= page %> -->
+  <h5>Here offers three types of products!</h5><br><br><br>
 
-</ul>
+
+  <div class="row">
+      <a class="col-sm-4" href="/airpods" id="imgAirpods">
+        <p>Airpods</p>
+        <img src="/img/airpods.jpg" width="400" height="400" alt="">  
+      </a>
+
+      <a class="col-sm-4" href="/iphone" id="imgIphone">
+        <p>iPhone</p>
+        <img src="img/iphone.jpg" width="400" height="400" alt="">
+      </a>
+
+      <a class="col-sm-4" href="/ps4" id="imgPs4">
+        <p>PS4</p>
+        <img src="img/ps4.jpg" width="400" height="400" alt="">
+      </a>
+
+    
+  </div>
+</div>
+
+
+
+</body>
+<% include partials/script %>
+
+
+<footer>
+    <% include partials/footer %>
+</footer>
+
+
+</html>

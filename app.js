@@ -1,32 +1,61 @@
 var express = require('express');
+var path = require('path');
+var logger = require('morgan');
+var index = require('./routes/index');
 var firebase = require("firebase");
+var app = express();
 
-var admin = require("firebase-admin");
-var serviceAccount = require("./jshw-7d806-firebase-adminsdk-68unq-67e54bfe33.json");
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://jshw-7d806.firebaseio.com"
+// set the view engine to ejs
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+
+// set path for static assets
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+
+// index page 
+app.use('/', index);
+
+// about page 
+app.get('/views/about', function(req, res) {
+    res.render('about');
 });
 
-var app = express();
-const puppeteer = require('puppeteer');
-// var config = {
-//     // apiKey: "AIzaSyCBzq2c88vfanIWRBw73hLfhPkJ7aTDJmI",
-//     // authDomain: "h-599f1.firebaseapp.com",
-//     // databaseURL: "https://h-599f1.firebaseio.com",
-//     // projectId: "h-599f1",
-//     // storageBucket: "h-599f1.appspot.com",
-//     // messagingSenderId: "723873673565"
-//     apiKey: "AIzaSyBMsxMyoPRjjfQYJAUpv5wBxaQY4lyGiUM",
-//     authDomain: "jshw-7d806.firebaseapp.com",
-//     databaseURL: "https://jshw-7d806.firebaseio.com",
-//     projectId: "jshw-7d806",
-//     storageBucket: "jshw-7d806.appspot.com",
-//     messagingSenderId: "413341207554"
-//   };
-//   firebase.initializeApp(config);
+// catch 404 and forward to error handler
+// app.use(function(req, res, next) {
+//     var err = new Error('Not Found');
+//     err.status = 404;
+//     next(err);
+//   });
+
+
+//error handler
+app.use(function(err, req, res, next) {
+// render the error page
+res.status(err.status || 500);
+res.render('error', {status:err.status, message:err.message});
+});
   
+module.exports = app;
+
+
+// require firebase-admin and firebase sdk
+var admin = require("firebase-admin");
+var serviceAccount = require("./newtest-ace1b-firebase-adminsdk-t4rq1-87f6ef350a");
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://newtest-ace1b.firebaseio.com"
+});
 var db = admin.database();
+
+const puppeteer = require('puppeteer');
+
+
+//index
+// app.get('/', function(req, res){
+//     res.render();
+// })
 
 
 //momo airpods
@@ -53,6 +82,7 @@ app.get('/momo/airpods', function (req, res) {
 
                 for (var element of prices) {
                     let price = element.innerText;
+                    price = price.replace(',', '');
                     price = price.replace('$', '');
                     price_data.push({ price });
                 }
@@ -86,7 +116,7 @@ app.get('/momo/iphone', function (req, res) {
         // const browser = await puppeteer.launch({headless:true, args: ['--no-sandbox', '--disable-setuid-sandbox']}); 
         const page = await browser.newPage();
         
-        await page.goto('https://www.momoshop.com.tw/search/searchShop.jsp?keyword=ps4%20%E4%B8%BB%E6%A9%9F%20pro&searchType=1&cuhttps://www.momoshop.com.tw/search/searchShop.jsp?keyword=iphone&searchType=1&curPage=1&_isFuzzy=0&showType=chessboardTyperPage=1&_isFuzzy=0&showType=chessboardType');
+        await page.goto('https://www.momoshop.com.tw/search/searchShop.jsp?keyword=iphone&searchType=1&curPage=1&_isFuzzy=0&showType=chessboardType');
         
         const result = await page.evaluate(() => {
             let title_data = [];
@@ -101,6 +131,7 @@ app.get('/momo/iphone', function (req, res) {
 
                 for (var element of prices) {
                     let price = element.innerText;
+                    price = price.replace(',', '');
                     price = price.replace('$', '');
                     price_data.push({ price });
                 }
@@ -148,6 +179,7 @@ app.get('/momo/ps4', function (req, res) {
 
                 for (var element of prices) {
                     let price = element.innerText;
+                    price = price.replace(',', '');
                     price = price.replace('$', '');
                     price_data.push({ price });
                 }
@@ -194,6 +226,7 @@ app.get('/friday/airpods', function (req, res) {
     
             for (var element of prices) {
                 let text = element.innerText;
+                text = text.replace(',', '');
                 text = text.replace('$', '');
                 price_data.push({ text });
             }
@@ -242,6 +275,7 @@ app.get('/friday/iphone', function (req, res) {
     
             for (var element of prices) {
                 let text = element.innerText;
+                text = text.replace(',', '');
                 text = text.replace('$', '');
                 price_data.push({ text });
             }
@@ -291,6 +325,7 @@ app.get('/friday/ps4', function (req, res) {
     
             for (var element of prices) {
                 let text = element.innerText;
+                text = text.replace(',', '');
                 text = text.replace('$', '');
                 price_data.push({ text });
             }
@@ -340,6 +375,7 @@ app.get('/myfone/airpods', function (req, res) {
 
             for (var element of prices) {
                 let text = element.innerText;
+                text = text.replace(',', '');
                 text = text.replace('$', '');
                 price_data.push({ text });
             }
@@ -385,6 +421,7 @@ app.get('/myfone/iphone', function (req, res) {
 
             for (var element of prices) {
                 let text = element.innerText;
+                text = text.replace(',', '');
                 text = text.replace('$', '');
                 price_data.push({ text });
             }
@@ -396,7 +433,7 @@ app.get('/myfone/iphone', function (req, res) {
         var products = new Array();
 
         for (r in result.title_data) {
-            products.push({ title: result.title_data[r].text, price: result.price_data[r].text, website: "Friday" });
+            products.push({ title: result.title_data[r].text, price: result.price_data[r].text, website: "myfone" });
         }
         return products;
     }
@@ -431,6 +468,7 @@ app.get('/myfone/ps4', function (req, res) {
 
             for (var element of prices) {
                 let text = element.innerText;
+                text = text.replace(',', '');
                 text = text.replace('$', '');
                 price_data.push({ text });
             }
@@ -457,27 +495,14 @@ app.get('/myfone/ps4', function (req, res) {
     });
 })
 
-app.get('/airpods', async function (req, res){
+//all airpods infor
+app.get('/airpods', function (req, res){
     var products = new Array();
 
     var dataMomoAirpods = db.ref('/momo/airpods').on('value', function(snapshot){
         var data = snapshot.val();
 
-        var temp;
-        for(var i = 0; i < data.length; i++){
-            for(var j = 0; j < data.length-1; j++){
-                if(data[j].price > data[j+1].price){
-                    temp = data[j+1];
-                    data[j+1] = data[j];
-                    data[j] = temp;
-                }
-            }
-        }
-
         for(var k = 0; k < data.length; k++){
-            if(data[k].price === 'string'){
-                data[k].price.replace(",", '');
-            }
             products.push({title: data[k].title, price: data[k].price, website: data[k].website});
         }
 
@@ -494,21 +519,7 @@ app.get('/airpods', async function (req, res){
     var dataFridayAirpods = db.ref('/friday/airpods').on('value', function(snapshot){
         var data = snapshot.val();
 
-        var temp;
-        for(var i = 0; i < data.length; i++){
-            for(var j = 0; j < data.length-1; j++){
-                if(data[j].price > data[j+1].price){
-                    temp = data[j+1];
-                    data[j+1] = data[j];
-                    data[j] = temp;
-                }
-            }
-        }
-
         for(var k = 0; k < data.length; k++){
-            if(data[k].price === 'string'){
-                data[k].price.replace(",", '');
-            }
             products.push({title: data[k].title, price: data[k].price, website: data[k].website});
         }
 
@@ -525,21 +536,7 @@ app.get('/airpods', async function (req, res){
     var dataMyfoneAirpods = db.ref('/myfone/airpods').on('value', function(snapshot){
         var data = snapshot.val();
 
-        var temp;
-        for(var i = 0; i < data.length; i++){
-            for(var j = 0; j < data.length-1; j++){
-                if(data[j].price > data[j+1].price){
-                    temp = data[j+1];
-                    data[j+1] = data[j];
-                    data[j] = temp;
-                }
-            }
-        }
-
         for(var k = 0; k < data.length; k++){
-            if(data[k].price === 'string'){
-                data[k].price.replace(",", '');
-            }
             products.push({title: data[k].title, price: data[k].price, website: data[k].website});
         }
 
@@ -554,6 +551,150 @@ app.get('/airpods', async function (req, res){
     });
 
 
+    var temp;
+    for(var i = 0; i < products.length; i++){
+        for(var j = 0; j < products.length-1; j++){
+            if(products[j].price > products[j+1].price){
+                temp = products[j+1];
+                products[j+1] = products[j];
+                products[j] = temp;
+            }
+        }
+    }
+
+    res.send(products);
+     
+});
+
+//all iphone infor
+app.get('/iphone', function (req, res){
+    var products = new Array();
+
+    var dataMomoAirpods = db.ref('/momo/iphone').on('value', function(snapshot){
+        var data = snapshot.val();
+
+        for(var k = 0; k < data.length; k++){
+            products.push({title: data[k].title, price: data[k].price, website: data[k].website});
+        }
+
+        for(var l = 0; l < products.length; l++){
+            var obj = products[l];
+            for(var prop in obj){
+                if(obj.hasOwnProperty(prop) && obj[prop] !== null && !isNaN(obj[prop])){
+                    obj[prop] = +obj[prop];   
+                }
+            }
+        }
+    });
+
+    var dataFridayAirpods = db.ref('/friday/iphone').on('value', function(snapshot){
+        var data = snapshot.val();
+
+        for(var k = 0; k < data.length; k++){
+            products.push({title: data[k].title, price: data[k].price, website: data[k].website});
+        }
+
+        for(var l = 0; l < products.length; l++){
+            var obj = products[l];
+            for(var prop in obj){
+                if(obj.hasOwnProperty(prop) && obj[prop] !== null && !isNaN(obj[prop])){
+                    obj[prop] = +obj[prop];   
+                }
+            }
+        }
+    });
+
+    var dataMyfoneAirpods = db.ref('/myfone/iphone').on('value', function(snapshot){
+        var data = snapshot.val();
+
+        for(var k = 0; k < data.length; k++){
+            products.push({title: data[k].title, price: data[k].price, website: data[k].website});
+        }
+
+        for(var l = 0; l < products.length; l++){
+            var obj = products[l];
+            for(var prop in obj){
+                if(obj.hasOwnProperty(prop) && obj[prop] !== null && !isNaN(obj[prop])){
+                    obj[prop] = +obj[prop];   
+                }
+            }
+        }
+    });
+
+
+    var temp;
+    for(var i = 0; i < products.length; i++){
+        for(var j = 0; j < products.length-1; j++){
+            if(products[j].price > products[j+1].price){
+                temp = products[j+1];
+                products[j+1] = products[j];
+                products[j] = temp;
+            }
+        }
+    }
+
+    res.send(products);
+      
+});
+
+
+//all ps4 infor
+app.get('/ps4', function (req, res){
+    var products = new Array();
+
+    var dataMomoAirpods = db.ref('/momo/ps4').on('value', function(snapshot){
+        var data = snapshot.val();
+
+        for(var k = 0; k < data.length; k++){
+            products.push({title: data[k].title, price: data[k].price, website: data[k].website});
+        }
+
+        for(var l = 0; l < products.length; l++){
+            var obj = products[l];
+            for(var prop in obj){
+                if(obj.hasOwnProperty(prop) && obj[prop] !== null && !isNaN(obj[prop])){
+                    obj[prop] = +obj[prop];   
+                }
+            }
+        }
+    });
+
+    var dataFridayAirpods = db.ref('/friday/ps4').on('value', function(snapshot){
+        var data = snapshot.val();
+
+        for(var k = 0; k < data.length; k++){
+            products.push({title: data[k].title, price: data[k].price, website: data[k].website});
+        }
+
+        for(var l = 0; l < products.length; l++){
+            var obj = products[l];
+            for(var prop in obj){
+                if(obj.hasOwnProperty(prop) && obj[prop] !== null && !isNaN(obj[prop])){
+                    obj[prop] = +obj[prop];   
+                }
+            }
+        }
+    });
+
+    var dataMyfoneAirpods = db.ref('/myfone/ps4').on('value', function(snapshot){
+        var data = snapshot.val();
+
+        for(var k = 0; k < data.length; k++){
+            products.push({title: data[k].title, price: data[k].price, website: data[k].website});
+        }
+
+        for(var l = 0; l < products.length; l++){
+            var obj = products[l];
+            for(var prop in obj){
+                if(obj.hasOwnProperty(prop) && obj[prop] !== null && !isNaN(obj[prop])){
+                    obj[prop] = +obj[prop];   
+                }
+            }
+        }
+    });
+
+
+    var temp;
     for(var i = 0; i < products.length; i++){
         for(var j = 0; j < products.length-1; j++){
             if(products[j].price > products[j+1].price){
@@ -570,6 +711,5 @@ app.get('/airpods', async function (req, res){
       
 });
 
-
-    var server = app.listen(8081, function () {
+    var server = app.listen(3000, function () {
     })
