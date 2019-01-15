@@ -1,4 +1,5 @@
 var express = require('express');
+var port = Number(process.env.PORT || '3000');
 var path = require('path');
 var logger = require('morgan');
 var index = require('./routes/index');
@@ -711,5 +712,4 @@ app.get('/ps4', function (req, res){
       
 });
 
-    var server = app.listen(3000, function () {
-    })
+app.listen(port);
