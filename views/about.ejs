@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
  <% include partials/head %> 
+ <link rel="/stylesheets" href="style.css">
 </head>
 <body>
 <% include partials/menu %>
@@ -9,16 +10,18 @@
 <div class="container-fluid bg-3 text-center">    
   <h3><%= page %></h3><br>
   <div class="row">
-    <div class="col-sm-4">
+    <div class = "imageMind">
+        <SCRIPT LANGUAGE="JavaScript">
+            function reP(){
+                document.getElementById('oImg').style.display = "block";
+            }
+        </SCRIPT>
+        <img src='img/QQ.png' id="oImg" style='display: none; margin:auto;'>
+        <INPUT TYPE="button" value='顯示當前心情' onclick="reP()">
+        </div>
+    <!-- <div class="col-sm-4"> 
       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-      
-    </div>
-    <div class="col-sm-4"> 
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-    </div>
-    <div class="col-sm-4"> 
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-    </div>
+    </div> -->
   </div>
 </div>
 

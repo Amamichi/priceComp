@@ -496,8 +496,8 @@ app.get('/myfone/ps4', function (req, res) {
     });
 })
 
-//all airpods infor
-app.get('/airpods', function (req, res){
+//offer top 10 cheapest airpods infor
+app.get('/airpodsTop10Cheapest', function (req, res){
     var products = new Array();
 
     var dataMomoAirpods = db.ref('/momo/airpods').on('value', function(snapshot){
@@ -563,12 +563,16 @@ app.get('/airpods', function (req, res){
         }
     }
 
+    for(var k = products.length; products.length-1 > 9 ; k--){
+        products.pop();
+    }
+
     res.send(products);
      
 });
 
-//all iphone infor
-app.get('/iphone', function (req, res){
+//offer top 10 cheapest iphone infor
+app.get('/iphoneTop10Cheapest', function (req, res){
     var products = new Array();
 
     var dataMomoAirpods = db.ref('/momo/iphone').on('value', function(snapshot){
@@ -634,13 +638,16 @@ app.get('/iphone', function (req, res){
         }
     }
 
+    for(var k = products.length; products.length-1 > 9 ; k--){
+        products.pop();
+    }
+
     res.send(products);
       
 });
 
-
-//all ps4 infor
-app.get('/ps4', function (req, res){
+//offer top 10 cheapest ps4 infor
+app.get('/ps4Top10Cheapest', function (req, res){
     var products = new Array();
 
     var dataMomoAirpods = db.ref('/momo/ps4').on('value', function(snapshot){
@@ -706,10 +713,11 @@ app.get('/ps4', function (req, res){
         }
     }
 
+    for(var k = products.length; products.length-1 > 9 ; k--){
+        products.pop();
+    }
+
     res.send(products);
-
-
-      
 });
 
 app.listen(port);

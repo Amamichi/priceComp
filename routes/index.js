@@ -7,11 +7,15 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/about', function(req, res, next) {
-  res.render('about', {page:'About Us', menuId:'about'});
+  res.render('about', {page:'About Me', menuId:'about'});
 });
 
 router.get('/contact', function(req, res, next) {
-  res.render('contact', {page:'Contact Us', menuId:'contact'});
+  res.render('contact', {page:'Contact', menuId:'contact'});
 });
+
+// router.get('/ps42', function(req, res, next) {
+//   res.render('ps42', {page:'ps42 Go', menuId:'ps42'});
+// });
 
 module.exports = router;
